@@ -5,9 +5,9 @@ using namespace std;
 
 /*
     Operations performed on LL or any data structure
-        1) Insertion
+        1) Insertion -> At start & At middle & At the end
         2) Search by value or position and traversal
-        3) Deletion
+        3) Deletion -> At start & (middle & in the end)/ At any other position
 
     Mention Time & Space Complexity of each operation
 */
@@ -22,12 +22,12 @@ class Node{
         this->data = num;
         this->next = nullptr;
     }
-    
+
     // Destructor
     ~Node(){
         int value = data;
         if(this->next!=nullptr) {
-            delete next;
+            delete this->next;
             this->next = nullptr;
         }
         cout << "Memory is free for node with data: " << value << endl;
@@ -35,7 +35,7 @@ class Node{
 };
 
 
-// Time Complexity : O(1) & Space complexity : 
+// Time Complexity : O(1) & Space complexity : O(1) 
 void insertNodeAtHead(Node* &head, int num) {
         // No Node present [Empty Linked List]
         if(head == nullptr){
@@ -48,11 +48,12 @@ void insertNodeAtHead(Node* &head, int num) {
                 // 1) Create new Node
                 Node* newNode = new Node(num);
                 newNode-> next = head; // Point next pointer to head
-                head = newNode; // Point head to new Node (which is new first node)
+                head = newNode; // Point head to new Node (which is now the first node)
         }
 }
 
-void insertNodeAtEnd(Node* &head, int num){
+// Time Complexity : O(n) & Space complexity : O(1)
+void insertNodeAtEnd(Node* &head, int num) {
     // Insert node at end or last
     Node* newNode = new Node(num); // Create a new Node
     if(head == nullptr){
@@ -68,6 +69,7 @@ void insertNodeAtEnd(Node* &head, int num){
     last = newNode;
 }
 
+// Time Complexity : O(n) & Space complexity : O(1) 
 int getLinkedListLength(Node* &head){
     Node* temp = head;
     int len = 0;
@@ -79,6 +81,7 @@ int getLinkedListLength(Node* &head){
     return len;
 }
 
+// Time Complexity : O(n) & Space complexity : O(1) 
 void insertNodeAtPosition(Node* &head,int position,int num){
     if(position == 1){
         insertNodeAtHead(head,num);
@@ -111,7 +114,8 @@ void insertNodeAtPosition(Node* &head,int position,int num){
     }
 }
 
-void deleteNodeByPosition(Node* head, int position){
+// Time Complexity : O(n) & Space complexity : O(1) 
+void deleteNodeByPosition(Node* &head, int position){
     if (head == nullptr) { 
         cout << "Empty LinkedList" << endl;
         return;
@@ -119,17 +123,47 @@ void deleteNodeByPosition(Node* head, int position){
 
     if(position == 1){
         Node* temp = head;
-        head = head -> next; // Update the head pointer
+        head = head -> next; // Update the head Pointer
 
         //Memory free the start Node
         temp -> next = nullptr;
         delete temp;
     }
     else{
-        cout << "-----------------";
+        // Deletion Node at invalid position
+        int length = getLinkedListLength(head);
+
+        if (position > length + 1 || position <=0) {  // Check for invalid positions
+            cout << "Invalid position. Cannot delete beyond the end.\n";
+            return;
+        } else if (position == length + 1 || position > 0) {  // Delete directly at the end
+        // Delete Node present at any location other than end Node
+        Node* currNode = head;
+        Node* prevNode = nullptr;
+        int count = 1;
+
+        while(count < position){
+            prevNode = currNode;
+            currNode = currNode -> next;
+            count++;
+        }
+        prevNode->next = currNode->next;
+        
+        // Memory free
+        currNode->next = nullptr;
+        delete currNode;
+        }
     }
 }
 
+/*
+void deleteNodeByValue(Node* &head, int num){
+    Node* prevNode = nullptr;
+    Node* currNode = head;
+}
+*/
+
+// Time Complexity : O(n) & Space complexity : O(1) 
 void printLinkedList(Node* &head){
     Node* temp = head;
     
@@ -145,21 +179,52 @@ int main(){
     Node* node1 = nullptr;
     Node* head = node1;
 
+    cout <<"\n";
+    if(head == nullptr){
+        cout << "LinkedList is empty" << endl;
+    }
+    cout <<"\n";
+
     insertNodeAtHead(head,1);
+    printLinkedList(head);
+    cout << "HEAD : " << head->data << endl;
+    cout << "LinkedList Length : "<< getLinkedListLength(head) << endl;
+    cout <<"\n";
 
     insertNodeAtHead(head,0);
-    cout << "Length of the LinkedList is : " << getLinkedListLength(head) << endl;
+    printLinkedList(head);
+    cout << "HEAD : " << head->data << endl;
+    cout << "LinkedList Length : "<< getLinkedListLength(head) << endl;
+    cout <<"\n";
 
     insertNodeAtPosition(head,3,3);
-    cout << "Head : " << head->data << endl;
+    printLinkedList(head);
+    cout << "HEAD : " << head->data << endl;
+    cout << "LinkedList Length : "<< getLinkedListLength(head) << endl;
+    cout <<"\n";
 
     insertNodeAtPosition(head,3,2);
-    cout << "Length of the LinkedList is : "<< getLinkedListLength(head) << endl;
+    printLinkedList(head);
+    cout << "HEAD : " << head->data << endl;
+    cout << "LinkedList Length : "<< getLinkedListLength(head) << endl;
+    cout <<"\n";
 
     insertNodeAtPosition(head,5,4);
-    insertNodeAtPosition(head,1,-1);
-
-    deleteNodeByPosition(head,1);
     printLinkedList(head);
+    cout << "HEAD : " << head->data << endl;
+    cout << "LinkedList Length : "<< getLinkedListLength(head) << endl;
+    cout <<"\n";
+
+    insertNodeAtPosition(head,1,-1);
+    printLinkedList(head);
+    cout << "HEAD : " << head->data << endl;
+    cout << "LinkedList Length : "<< getLinkedListLength(head) << endl;
+    cout <<"\n";
+
+    deleteNodeByPosition(head,6);
+    printLinkedList(head);
+    cout << "LinkedList Length : "<< getLinkedListLength(head) << endl;
+    cout <<"\n";
+    
     return 0;
 }
