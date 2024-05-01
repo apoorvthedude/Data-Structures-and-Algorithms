@@ -38,5 +38,33 @@ public:
     }
 };
 
+//Iterative Method
 // Brute force approach
 // Time complexity : O(n) and Space complexity : O(n) 
+
+//---------------------------------------------------------------------------------------------------------------------
+//Iterative method
+//Optimized solution with T.C : O(n) and S.C : O(1)
+
+
+// Time taken: 1 hr 34 min
+ListNode* reverseList(ListNode* head) {
+        if(head == nullptr || head->next == nullptr)
+            return head;
+
+        // Taking three-pointers to manipulate the address instead of taking val
+        ListNode* prev = NULL;
+        ListNode* curr = head;
+        ListNode* nextNode;
+    
+        while(curr!=NULL){
+            nextNode = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = nextNode;
+        }
+
+    return prev;
+    }
+//------------------------------------------------------------------------------------------------------------
+    // Recursive Method
